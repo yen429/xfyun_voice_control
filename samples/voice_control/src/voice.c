@@ -730,17 +730,24 @@ void alarm_parse(const char *jason)
 		{
 			INFO_MSG("Create Alarm\n");
 			pch = strstr((char *)alarm_jason, "\\\"datetime\\\"");
-			//INFO_MSG("%s\n",pch);
-			datetime_str = strtok (pch," \\\"");
-			while(count < 3)
+			if(pch == NULL)
 			{
-				INFO_MSG("%s\n",datetime_str);
-				if(count == 2)
+				INFO_MSG("Cannot fine datetime\n");
+			}
+			else
+			{
+				//Save the datatime
+				datetime_str = strtok (pch," \\\"");
+				while(count < 3)
 				{
-					alarm_write_to_file(datetime_str);
+					INFO_MSG("%s\n",datetime_str);
+					if(count == 2)
+					{
+						alarm_write_to_file(datetime_str);
+					}
+					datetime_str = strtok (NULL," \\\"");
+					count++;
 				}
-				datetime_str = strtok (NULL," \\\"");
-				count++;
 			}
 		}
 		
