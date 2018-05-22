@@ -115,9 +115,11 @@ void voice_init(const char *xfyun_appid, const char *usb_audio_addr)
 		ERROR_MSG("voice初始化失败：设置启动模式错误！\n");
 		return;
 	}
-	
-	//voice.pcm_capture_handle  = pcm_setup(SND_PCM_STREAM_CAPTURE, voice.usb_audio_addr);
+#ifdef ARM_DEV
 	voice.pcm_capture_handle  = pcm_setup(SND_PCM_STREAM_CAPTURE, "plughw:1,0");
+#else
+	voice.pcm_capture_handle  = pcm_setup(SND_PCM_STREAM_CAPTURE, voice.usb_audio_addr);
+#endif
 	voice.pcm_playback_handle = pcm_setup(SND_PCM_STREAM_PLAYBACK, voice.usb_audio_addr);
 	
 	INFO_MSG("Voice Initial Success\n");
