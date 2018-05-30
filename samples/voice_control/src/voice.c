@@ -838,7 +838,7 @@ static int voice_chat_and_control(void)
 		
 		case SPEAK_STATE:
 		{
-			char ans_fifo[40960]={0};
+			char ans_fifo[163840]={0};
 			DEBUG_MSG("SPEAK_STATE\n");
 			if (voice.recongnition_switch == SWITCH_OFF || voice.sound_box_ongoing_flag < 0)
 			{
@@ -849,6 +849,10 @@ static int voice_chat_and_control(void)
 			{
 				break;
 			}
+			
+			//Send JSON data to FIFO
+			snprintf( ans_fifo, sizeof( ans_fifo )-1, "JSON:%s\n",voice.answer_jason);
+			fifo_write(voice_control_fd ,ans_fifo, strlen(ans_fifo));
 			
 			//Parser Alarm
 			alarm_parse(voice.answer_jason);
